@@ -4,44 +4,46 @@
 int main() {
     FILE* fptr;
     fptr = fopen("input.txt", "r");
-    
+
     if (fptr == NULL) {
         printf("File loading failed");
     } else {
 
         char line[120];
-        int total = 0;
+        long long int total = 0;
+        int keep = 12;
         while (fgets(line, 120, fptr)) {
 
-            int largest = line[0];
-            int largestPos = 0;
             int size = strcspn(line, "\n");
+            int drop = size - 12;
 
-            for (int i = 1; i < (size - 1); i++) { // find largest digit first, not last digit
-                if (line[i] >= '0' && line[i] <= '9' && line[i] > largest) {
-                    largest = line[i];
-                    largestPos = i;
+            char out[120];
+            int outLength = 0;
+
+            for (int i = 0; i < size; i++) {
+
+                while (outLength > 0 && drop > 0 && out[outLength - 1] < line[i]) {
+                    outLength--;
+                    drop--;
                 }
+
+                out[outLength++] = line[i];
             }
 
-            int secondLargest = 0;
-            for (int i = largestPos + 1; i < size; i++) {
-                if (line[i] >= '0' && line[i] <= '9' && line[i] > secondLargest) {
-                    secondLargest = line[i];
-                }
+            if (outLength > keep) {
+                outLength = keep; // cut off right ones
             }
 
-            char highest[3];
-            highest[0] = largest;
-            highest[1] = secondLargest;
-            highest[2] = '\0';
+            long long value = 0;
+            for (int i = 0; i < outLength; ++i) {
+                value = value * 10 + (out[i] - '0');
+            }
 
-            int maxComb;
-            sscanf(highest, "%d", &maxComb);
-            total += maxComb;
-            printf("Line: %s has highest: %d\n", line, maxComb);
+            total += value;
+            printf("%s yields %lld\n", out, value);
         }
-        printf("Total: %d\n", total);
+
+        printf("Total: %lld\n", total);
         fclose(fptr);
     }
 }
