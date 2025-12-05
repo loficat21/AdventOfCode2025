@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+int removePaper(int arr[142][142], int rowCount, int cols);
+
 int main() {
     FILE* fptr;
     fptr = fopen("input.txt", "r");
@@ -27,6 +29,8 @@ int main() {
         }
         ++rowCount;
     }
+    
+    fclose(fptr);
 
     // print array including the buffer rows/cols
     // for (int r = 0; r < rowCount + 2; r++) {
@@ -36,7 +40,22 @@ int main() {
     //     printf("\n");
     // }
 
+    int grandTotal = 0;
+    while(1) {
+        int removed = removePaper(arr, rowCount, cols);
+        if (removed == 0) break;
+        grandTotal += removed;
+    }
+
+    printf("%d\n", grandTotal);
+}
+
+
+int removePaper(int arr[142][142], int rowCount, int cols) {
+
+    int toRemove[142][142] = {0};  // mark cells to remove this round
     int total = 0;
+
     for(int i = 1; i < rowCount + 1; i++) {
         for(int j = 1; j < cols + 1; j++) {
 
@@ -52,20 +71,22 @@ int main() {
                 }
                 
                 if (count < 4) {
-                    total++;
+                    toRemove[i][j] = 1;
                 }
 
             }
         }
     }
 
+    // now actually remove the marked rolls
+    for (int i = 1; i < rowCount + 1; i++) {
+        for (int j = 1; j < cols + 1; j++) {
+            if (toRemove[i][j]) {
+                arr[i][j] = 0;
+                total++;
+            }
+        }
+    }
 
-
-    printf("%d\n", total);
-    fclose(fptr);
+    return total;
 }
-
-
-
-
-// helper function that counts num paper rolls around positon i, j
