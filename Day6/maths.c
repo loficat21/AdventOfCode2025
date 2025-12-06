@@ -1,7 +1,11 @@
-// read all 5 lines with fgets
-// loop through each line in steps of four, saving each four chars into separate array and running atoi on it
-// save these four values in array[6] that starts with a number defining * or +
-// do the actual calculation
+// part 2 is just a more complex parsing problem
+// mid exercise, ill probably skip it.
+
+// here are my thoughts on how i would tackle it on an idea level:
+// in the ACTUAL MATH section, whenever you process a new column,
+// i would parse each number in reverse into an array of size 16 
+// which is initialized to 0 and then, from that, piece together
+// my cephalopod style numbers
 
 #include <stdio.h>
 #include <stdlib.h>
